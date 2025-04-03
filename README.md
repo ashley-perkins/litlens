@@ -1,0 +1,34 @@
+# LitLens 🧠📚  
+_A Lightweight AI-Powered Literature Review Assistant_
+
+![LitLens Banner](https://user-images.githubusercontent.com/your-github-username/banner-placeholder.png)  
+> “Designed to summarize, structure, and surface scientific insights with clarity and speed.”
+
+---
+
+## 🚀 What is LitLens?
+
+**LitLens** is an AI-augmented literature review tool that extracts, filters, and summarizes research papers based on a defined research goal. Built with researchers, students, and program leads in mind, LitLens turns a folder of PDFs into a structured summary report — in either Markdown or plain text.
+
+---
+
+## 🧩 Core Features
+
+- 📝 **Auto-Summarization by Section**: Breaks down papers by intro, methods, results, etc.
+- 🎯 **Goal-Driven Relevance Filtering**: Only includes papers relevant to your research goal.
+- 🧠 **Semantic Embedding Matching**: Uses OpenAI embeddings to understand content meaning.
+- 🗂️ **Table of Contents & Metadata**: Extracts section titles, authors, journal, and year.
+- 📦 **Markdown + TXT Export**: Ready-to-read reports for publication or knowledge capture.
+- 🧪 **Modular Codebase**: Clean architecture for easy scaling or front-end integration.
+
+---
+
+## ⚙️ How It Works
+
+```bash
+python litlens.py \
+  --goal "My research goal here" \
+  --input-dir "path_to_your_pdfs" \
+  --threshold 0.4 \
+  --output "output_directory" \
+  --format md
