@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter Notebooks (optional)
+*.ipynb
+
+# Environment files
+.env
+*.env
+
+# Reports and outputs
+*.txt
+*.md
+litreview/
+litlens_summary_report.*
+
+# VS Code settings
+.vscode/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Virtual environment folders
+venv/
+env/
