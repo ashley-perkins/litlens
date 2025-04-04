@@ -10,6 +10,9 @@ __pycache__/
 .env
 *.env
 
+# Allow specific txt files before the general ignore
+!requirements.txt
+
 # Reports and outputs
 *.txt
 *.md

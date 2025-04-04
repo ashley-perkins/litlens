@@ -93,3 +93,21 @@ def summarize_papers(relevant_papers, goal):
     print("\n✅ All papers summarized.\n")
     return summaries
 
+def summarize_inline_text(content: str, goal: str) -> str:
+    """Use summarization logic on a single text input instead of PDFs"""
+    prompt = (
+        f"You are an expert scientific writer assisting with a literature review.\n\n"
+        f"Research Goal: {goal}\n\n"
+        f"Content to Summarize:\n{content}\n\n"
+        f"Task:\n- Summarize this content in 3–5 bullet points.\n"
+        f"- Focus on findings relevant to the research goal.\n"
+        f"- Keep tone academic, format clean (Markdown).\n"
+        f"- End with a [Reviewer Note] assessing how well this content aligns with the research goal.\n"
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-4",  # Or gpt-3.5 turbo if you want
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    return response.choices[0].message.content.strip()
