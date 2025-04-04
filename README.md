@@ -33,6 +33,8 @@ python litlens.py \
   --output "output_directory" \
   --format md
 
+---
+
 ## 📌 Roadmap
  Hugging Face backend for chunking + summarization
 
