@@ -23,6 +23,33 @@ _A Lightweight AI-Powered Literature Review Assistant_
 
 ---
 
+## 📌 Roadmap
+ Hugging Face backend for chunking + summarization
+
+ Lovable (React) frontend for drag-and-drop + interactive review
+
+ Research Timeline Generator
+
+ In-browser chatbot mode
+
+---
+
+## 🧠 Built With
+Python 3.10+
+
+OpenAI API (gpt-3.5-turbo, embeddings)
+
+pdfminer, tiktoken, scikit-learn, dotenv
+
+---
+
+## 👩‍🔬 Author
+Ashley — Program Manager turned AI Builder
+✨ GitHub: @ashley-perkins
+✨ Co-led with: ChatGPT🧠
+
+---
+
 ## ⚙️ How It Works
 
 ```bash
@@ -33,25 +60,5 @@ python litlens.py \
   --output "output_directory" \
   --format md
 
----
 
-## 📌 Roadmap
- Hugging Face backend for chunking + summarization
 
- Lovable (React) frontend for drag-and-drop + interactive review
-
- Research Timeline Generator
-
- In-browser chatbot mode
-
-##🧠 Built With
-Python 3.10+
-
-OpenAI API (gpt-3.5-turbo, embeddings)
-
-pdfminer, tiktoken, scikit-learn, dotenv
-
-##👩‍🔬 Author
-Ashley — Program Manager turned AI Builder
-✨ GitHub: @ashley-perkins
-✨ Co-led with: ChatGPT🧠
