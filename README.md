@@ -10,6 +10,8 @@ _A Lightweight AI-Powered Literature Review Assistant_
 
 **LitLens** is an AI-augmented literature review tool that extracts, filters, and summarizes research papers based on a defined research goal. Built with researchers, students, and program leads in mind, LitLens turns a folder of PDFs into a structured summary report — in either Markdown or plain text.
 
+It's like having a research assistant who never sleeps.
+
 ---
 
 ## 🧩 Core Features
@@ -23,14 +25,15 @@ _A Lightweight AI-Powered Literature Review Assistant_
 
 ---
 
-## 📌 Roadmap
- Hugging Face backend for chunking + summarization
+## 🛣️ Roadmap (In Progress)
 
- Lovable (React) frontend for drag-and-drop + interactive review
+✅ Hugging Face backend for chunking + summarization
 
- Research Timeline Generator
+🧩 Lovable (React) frontend with drag-and-drop + interactive review
 
- In-browser chatbot mode
+🗓️ Research Timeline Generator
+
+🤖 In-browser chatbot mode for real-time querying
 
 ---
 
@@ -47,6 +50,16 @@ pdfminer, tiktoken, scikit-learn, dotenv
 Ashley — Program Manager turned AI Builder
 ✨ GitHub: @ashley-perkins
 ✨ Co-led with: ChatGPT🧠
+
+---
+
+🛡️ License
+This project is released under the MIT License, with the following additional terms:
+
+🔒 Respect the original work.
+This project was created as a public MVP by Ashley Perkins.
+Forks are welcome, but direct replication, commercial use, or redistribution of the project or its name without significant modification and written permission is prohibited.
+If you’re interested in building on LitLens or collaborating—reach out.
 
 ---
 
