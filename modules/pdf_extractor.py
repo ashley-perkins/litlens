@@ -23,3 +23,23 @@ def extract_papers(pdf_folder):
 
     print(f"✅ Extracted {len(papers)} papers.\n")
     return papers
+
+
+def extract_text_from_folder(folder_path):
+    papers = []
+
+    for filename in os.listdir(folder_path):
+        if not filename.lower().endswith(".pdf"):
+            continue
+
+        file_path = os.path.join(folder_path, filename)
+        try:
+            text = extract_text(file_path)
+            papers.append({
+                "filename": filename,
+                "content": text
+            })
+        except Exception as e:
+            print(f"❌ Failed to extract from {filename}: {e}")
+    
+    return papers
