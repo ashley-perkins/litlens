@@ -1,3 +1,13 @@
+---
+title: LitLens
+emoji: 🧠📚
+colorFrom: indigo
+colorTo: pink
+sdk: docker
+app_file: main.py
+pinned: true
+---
+
 # LitLens 🧠📚  
 _A Lightweight AI-Powered Literature Review Assistant_
 
