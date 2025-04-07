@@ -145,4 +145,5 @@ identify biomarkers for appendiceal neoplasms
 
 - Summary of unrelated findings  
 - [Reviewer Note]: This paper is not directly relevant to the goal but provides useful context.
->>>>>>> 34bdaee (✨ LitLens v0.3: Added summarization pipeline, markdown export, and output routing)
+
+✨ LitLens v0.3: Added summarization pipeline, markdown export, and output routing
