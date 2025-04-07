@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from modules import summarizer, pdf_extractor, embedder, relevance_filter, report_generator
 from utils import output_writer
+from utils import hf_utils
 from utils.pdf_utils import extract_pdf_metadata
 import os
 
@@ -23,6 +24,18 @@ def summarize_text(request: SummarizeRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Summarization failed: {str(e)}")
 
+# === Hugging Face Summarization ===
+@router.post("/summarize-hf")
+def summarize_with_huggingface(request: SummarizeRequest):
+    try:
+        print("🟡 Hugging Face summarization started...")
+        summary = hf_utils.summarize_text(request.content)
+        return {
+            "goal": request.goal,
+            "summary": summary
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Hugging Face summarization failed: {str(e)}")
 
 # === Full Folder Summarization ===
 class PDFSummarizationRequest(BaseModel):
