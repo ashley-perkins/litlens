@@ -3,7 +3,7 @@ import os
 
 # Load the Hugging Face summarization pipeline
 # You can swap the model later if needed
-def load_summarizer(model_name="google/pegasus-xsum"):
+def load_summarizer(model_name="philschmid/bart-large-cnn-samsum"):
     print("🧠 Loading Hugging Face summarization model...")
     return pipeline("summarization", model=model_name)
 
