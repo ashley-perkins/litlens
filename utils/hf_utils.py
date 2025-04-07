@@ -5,7 +5,7 @@ import os
 # You can swap the model later if needed
 def load_summarizer(model_name="sshleifer/distilbart-cnn-12-6"):
     print("🧠 Loading Hugging Face summarization model...")
-    return pipeline("summarization", model=model_name, from_tf=True)
+    return pipeline("summarization", model=model_name, from_flax=True)
 
 # Run a summarization task
 def summarize_text(text, model=None, max_tokens=512):
