@@ -157,3 +157,17 @@ identify biomarkers for appendiceal neoplasms
 - [Reviewer Note]: This paper is not directly relevant to the goal but provides useful context.
 
 ✨ LitLens v0.3: Added summarization pipeline, markdown export, and output routing
+
+## 🚀 Usage (HF API Summary Endpoint)
+
+This space currently supports a simple summarization endpoint for Hugging Face testing.
+
+### Endpoint
+`POST /summarize-hf`
+
+### Example Input (JSON)
+```json
+{
+  "goal": "Identify appendix proteins",
+  "content": "The presence of alpha-synuclein in the appendix, even in healthy individuals, suggests a potential link between the appendix and the development of Parkinson’s disease."
+}
