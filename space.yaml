@@ -1,8 +1,8 @@
 # space.yaml
 
 title: LitLens
-emoji: 🧠
-colorFrom: blue
+emoji: 🧠📚
+colorFrom: indigo
 colorTo: pink
 sdk: docker
 app_port: 7860
