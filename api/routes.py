@@ -5,6 +5,7 @@ from utils import output_writer
 from utils import hf_utils
 from utils.pdf_utils import extract_pdf_metadata
 import os
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -36,6 +37,16 @@ def summarize_with_huggingface(request: SummarizeRequest):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Hugging Face summarization failed: {str(e)}")
+
+# ✅ Root route for Hugging Face App
+@router.get("/", include_in_schema=False)
+def root():
+    return JSONResponse(
+        content={
+            "message": "✅ LitLens backend is running.",
+            "usage": "Use the /summarize-hf endpoint or visit /docs for API documentation.",
+        }
+    )
 
 # === Full Folder Summarization ===
 class PDFSummarizationRequest(BaseModel):
