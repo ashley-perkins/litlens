@@ -72,6 +72,77 @@ python litlens.py \
   --threshold 0.4 \
   --output "output_directory" \
   --format md
+<<<<<<< HEAD
 
 
 
+=======
+🧪 Summarize a Folder of Scientific PDFs
+LitLens can now process a full folder of scientific papers, filter them based on a research goal, summarize the relevant ones using GPT-4, and export a beautifully formatted markdown report.
+
+🔁 Endpoint
+http
+Copy
+Edit
+POST /summarize-pdfs
+🔧 Request Body
+json
+Copy
+Edit
+{
+  "goal": "identify biomarkers for appendiceal neoplasms",
+  "folder_path": "test_pdfs"
+}
+goal: Your specific research goal.
+
+folder_path: Relative or absolute path to the folder containing your PDFs.
+
+✅ Output
+A markdown report will be saved to the output/ directory.
+
+Filename format:
+
+Copy
+Edit
+{safe_goal}_summary_report.md
+Example:
+
+bash
+Copy
+Edit
+output/identify_biomarkers_for_appendiceal_neoplasms_summary_report.md
+📦 Example Report Format
+markdown
+Copy
+Edit
+# LitLens Summary Report
+
+## Research Goal
+identify biomarkers for appendiceal neoplasms
+
+## Table of Contents
+1. [Paper Title](#paper-1)
+   - Year: 2022 | Journal: Nature | Authors: Smith et al.
+   - Abstract
+   - Methods
+   - Results
+2. [Another Paper](#paper-2)
+   - Year: 2021
+   - Discussion
+   - Conclusion
+
+--- End of Table of Contents ---
+
+## Paper 1: Paper Title  
+*Year: 2022 | Journal: Nature | Authors: Smith et al.*
+
+- Key findings in bullet points  
+- Relevance to goal  
+- [Reviewer Note]: This paper strongly supports the research goal by identifying key biomarkers in...
+
+## Paper 2: Another Paper  
+*Year: 2021*
+
+- Summary of unrelated findings  
+- [Reviewer Note]: This paper is not directly relevant to the goal but provides useful context.
+>>>>>>> 34bdaee (✨ LitLens v0.3: Added summarization pipeline, markdown export, and output routing)

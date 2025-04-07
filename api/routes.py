@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from modules import summarizer, pdf_extractor, embedder, relevance_filter
+from modules import summarizer, pdf_extractor, embedder, relevance_filter, report_generator
+from utils import output_writer
 from utils.pdf_utils import extract_pdf_metadata
 import os
 
@@ -47,13 +48,17 @@ def summarize_pdfs(request: PDFSummarizationRequest):
 
         if not relevant_papers:
             raise HTTPException(status_code=404, detail="No papers matched the research goal.")
-       
+
         # 3. Summarize
         summaries = summarizer.summarize_papers(relevant_papers, request.goal)
 
+       # 4 & 5. Export Summary to Output File (let it handle formatting)
+        output_path = output_writer.save_summary_to_file(summaries, request.goal)
+
         return {
             "goal": request.goal,
-            "summaries": summaries
+            "summaries": summaries,
+            "output_path": output_path
         }
 
     except Exception as e:

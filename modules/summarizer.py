@@ -1,7 +1,8 @@
-from openai import OpenAI  
+from openai import OpenAI   
 from dotenv import load_dotenv
 import os
 import tiktoken
+import time
 from modules import chunker
 from utils.pdf_utils import extract_title_from_text, extract_pdf_metadata
 
@@ -73,24 +74,37 @@ def summarize_papers(relevant_papers, goal):
                 f"Section Content:\n{section_content}"
             )
 
-            # Token-safe adjustment of full message
             messages = [{"role": "user", "content": prompt}]
             token_count = count_message_tokens(messages)
             if token_count > ALLOWED_TOKENS:
                 print(f"⚠️ Trimming section: {section_title} from {token_count} tokens")
-                allowed_section_tokens = ALLOWED_TOKENS - count_message_tokens([{"role": "user", "content": prompt.replace(section_content, '')}])
+                prompt_base = prompt.replace(section_content, '')
+                allowed_section_tokens = ALLOWED_TOKENS - count_message_tokens([{"role": "user", "content": prompt_base}])
                 section_trimmed = enc.decode(enc.encode(section_content)[:allowed_section_tokens])
                 prompt = prompt.replace(section_content, section_trimmed)
+                print(f"✂️ Trimmed section to {allowed_section_tokens} tokens")
 
             print(f"✏️ Summarizing Section: {section_title} ({i+1}/{len(chunks)})")
 
-            response = client.chat.completions.create(
-                model="gpt-4",
-                messages=[{"role": "user", "content": prompt}]
-            )
+            success = False
+            while not success:
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-4",
+                        messages=[{"role": "user", "content": prompt}]
+                    )
+                    success = True
+                except Exception as e:
+                    if "rate_limit_exceeded" in str(e):
+                        print("⏳ Rate limit hit. Waiting 2s before retry...")
+                        time.sleep(2)
+                    else:
+                        raise e
 
             chunk_summary = response.choices[0].message.content.strip()
             paper_summary += chunk_summary + "\n\n"
+
+            time.sleep(1.5)  # Delay to avoid spamming API
 
         summaries.append({
             "filename": paper['filename'],

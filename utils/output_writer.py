@@ -1,24 +1,36 @@
 import os
+from modules import report_generator
 
-def save_summary_to_file(summary_data, output_dir="output", filename="summary.txt"):
+BASE_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "output")
+
+def sanitize_filename(name):
     """
-    Saves a summarized paper to a text file with metadata.
+    Replace or remove problematic characters from a string to make it safe for filenames.
+    """
+    return "_".join(name.strip().lower().split())
+
+def save_summary_to_file(summaries, goal, output_dir=BASE_OUTPUT_DIR, format="md"):
+    """
+    Saves the generated summary report to a file in the specified format (markdown or text).
     """
     os.makedirs(output_dir, exist_ok=True)
+    safe_goal = sanitize_filename(goal)
+    filename = f"{safe_goal}_summary_report.{format}"
     output_path = os.path.join(output_dir, filename)
 
+    # Generate report content
+    if format == "md":
+        content = report_generator.generate_markdown_report(summaries, goal)
+    else:
+        content = report_generator.generate_report(summaries, goal, return_as_string=True)
+
+    # Ensure content is a string
+    if isinstance(content, list):
+        content = "\n".join(content)
+
+    # Write to file
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(f"Goal: {summary_data.get('goal', 'N/A')}\n")
-        f.write(f"Filename: {summary_data.get('filename', 'N/A')}\n")
-        f.write(f"Title: {summary_data.get('title', 'N/A')}\n")
-        
-        metadata = summary_data.get("metadata", {})
-        f.write(f"Year: {metadata.get('year', 'N/A')}\n")
-        f.write(f"Authors: {metadata.get('authors', 'N/A')}\n")
-        f.write(f"Journal: {metadata.get('journal', 'N/A')}\n")
-        
-        f.write("\n--- Summary ---\n")
-        f.write(summary_data.get("summary", "No summary available.").strip())
-        print(f"📄 Writing summary to {output_path}")
-    
+        f.write(content)
+
     print(f"✅ Summary written to: {output_path}")
+    return output_path
