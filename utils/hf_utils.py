@@ -3,7 +3,7 @@ import os
 
 # Load the Hugging Face summarization pipeline
 # You can swap the model later if needed
-def load_summarizer(model_name="sshleifer/tiny-distilbart-cnn-6-6"):
+def load_summarizer(model_name="sshleifer/distilbart-cnn-12-6"):
     print("🧠 Loading Hugging Face summarization model...")
     return pipeline("summarization", model=model_name)
 
