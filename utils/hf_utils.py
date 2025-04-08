@@ -3,9 +3,9 @@ import os
 
 # Load the Hugging Face summarization pipeline
 # You can swap the model later if needed
-def load_summarizer(model_name="t5-small"):
+def load_summarizer(model_name="sshleifer/tiny-distilbart-cnn-6-6"):
     print("🧠 Loading Hugging Face summarization model...")
-    return pipeline("summarization", model=model_name, from_tf=True)
+    return pipeline("summarization", model=model_name)
 
 # Run a summarization task
 def summarize_text(text, model=None, max_tokens=512):
