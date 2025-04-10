@@ -27,10 +27,10 @@ def summarize_text(request: SummarizeRequest):
 
 # === Hugging Face Summarization ===
 @router.post("/summarize-hf")
-def summarize_with_huggingface(request: SummarizeRequest):
+async def summarize_with_huggingface(request: SummarizeRequest):
     try:
         print("🟡 Hugging Face summarization started...")
-        summary = hf_utils.summarize_text(request.content)
+        summary = await hf_utils.summarize_text_with_hf_api(request.content)
         return {
             "goal": request.goal,
             "summary": summary

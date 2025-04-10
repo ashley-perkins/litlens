@@ -1,20 +1,18 @@
-from transformers import pipeline
+import httpx
 import os
 
-# Load the Hugging Face summarization pipeline
-# You can swap the model later if needed
-def load_summarizer(model_name="sshleifer/distilbart-cnn-12-6"):
-    print("📚 Loading Hugging Face summarization model...")
-    return pipeline("summarization", model=model_name, from_flax=True)
+API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
+if not API_TOKEN:
+    raise EnvironmentError("HUGGINGFACE_API_TOKEN not found in environment variables.")
 
-# Run a summarization task
-def summarize_text(text, model=None, max_tokens=512):
-    if model is None:
-        model = load_summarizer()
+async def summarize_text_with_hf_api(text: str, model_name: str = "facebook/bart-large-cnn"):
+    headers = {"Authorization": f"Bearer {API_TOKEN}"}
+    payload = {"inputs": text}
+    url = f"https://api-inference.huggingface.co/models/{model_name}"
 
-    if len(text.strip()) == 0:
-        return "[No content provided.]"
+    async with httpx.AsyncClient() as client:
+        response = await client.post(url, headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+        return result[0]["summary_text"]
 
-    # Hugging Face pipeline handles token truncation internally
-    result = model(text, max_length=max_tokens, min_length=50, do_sample=False)
-    return result[0]["summary_text"].strip()
