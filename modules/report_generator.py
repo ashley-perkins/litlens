@@ -1,7 +1,11 @@
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def generate_report(summaries, goal, output_path="litlens_summary_report.txt", format="txt", return_as_string=False):
-    print("📝 Generating report...")
+    logger.info("📝 Generating report...")
 
     # --- Fix extension automatically ---
     if format == "md" and not output_path.endswith(".md"):
@@ -11,83 +15,88 @@ def generate_report(summaries, goal, output_path="litlens_summary_report.txt", f
 
     lines = []
 
-    # --- Header ---
-    if format == "md":
-        lines.append(f"# LitLens Summary Report\n")
-        lines.append(f"## Research Goal\n\n{goal}\n")
-        lines.append(f"## Table of Contents\n")
-    else:
-        lines.append("LitLens Summary Report\n")
-        lines.append("=======================\n")
-        lines.append(f"Research Goal: {goal}\n")
-        lines.append("Table of Contents\n========================\n")
-
-    # --- TOC ---
-    for i, paper in enumerate(summaries, 1):
-        title = paper.get('title', f"Paper {i}")
-        metadata = paper.get("metadata", {})
-
-        meta_line = []
-        if metadata.get("year"):
-            meta_line.append(f"Year: {metadata['year']}")
-        if metadata.get("journal"):
-            meta_line.append(f"Journal: {metadata['journal']}")
-        if metadata.get("authors"):
-            meta_line.append(f"Authors: {metadata['authors']}")
-        meta_line_str = " | ".join(meta_line)
-
+    try:
+        # --- Header ---
         if format == "md":
-            lines.append(f"{i}. [{title}](#paper-{i})")
-            if meta_line_str:
-                lines.append(f"   - {meta_line_str}")
+            lines.append(f"# LitLens Summary Report\n")
+            lines.append(f"## Research Goal\n\n{goal}\n")
+            lines.append(f"## Table of Contents\n")
         else:
-            lines.append(f"{i}. {title}")
-            if meta_line_str:
-                lines.append(f"   - {meta_line_str}")
+            lines.append("LitLens Summary Report\n")
+            lines.append("=======================\n")
+            lines.append(f"Research Goal: {goal}\n")
+            lines.append("Table of Contents\n========================\n")
 
-        chunks = paper.get("chunks", [])
-        seen = set()
-        for chunk in chunks:
-            section_title = chunk.get('title', 'Untitled Section').strip()
-            if section_title and section_title not in seen:
-                seen.add(section_title)
-                lines.append(f"   - {section_title}")
+        # --- TOC ---
+        for i, paper in enumerate(summaries, 1):
+            title = paper.get('title', f"Paper {i}")
+            metadata = paper.get("metadata", {})
 
-    lines.append("\n--- End of Table of Contents ---\n")
+            meta_line = []
+            if metadata.get("year"):
+                meta_line.append(f"Year: {metadata['year']}")
+            if metadata.get("journal"):
+                meta_line.append(f"Journal: {metadata['journal']}")
+            if metadata.get("authors"):
+                meta_line.append(f"Authors: {metadata['authors']}")
+            meta_line_str = " | ".join(meta_line)
 
-    # --- Full Summaries ---
-    for i, paper in enumerate(summaries, 1):
-        title = paper.get('title', f"Paper {i}")
-        metadata = paper.get("metadata", {})
+            if format == "md":
+                lines.append(f"{i}. [{title}](#paper-{i})")
+                if meta_line_str:
+                    lines.append(f"   - {meta_line_str}")
+            else:
+                lines.append(f"{i}. {title}")
+                if meta_line_str:
+                    lines.append(f"   - {meta_line_str}")
 
-        meta_line = []
-        if metadata.get("year"):
-            meta_line.append(f"Year: {metadata['year']}")
-        if metadata.get("journal"):
-            meta_line.append(f"Journal: {metadata['journal']}")
-        if metadata.get("authors"):
-            meta_line.append(f"Authors: {metadata['authors']}")
-        meta_line_str = " | ".join(meta_line)
+            chunks = paper.get("chunks", [])
+            seen = set()
+            for chunk in chunks:
+                section_title = chunk.get('title', 'Untitled Section').strip()
+                if section_title and section_title not in seen:
+                    seen.add(section_title)
+                    lines.append(f"   - {section_title}")
 
-        if format == "md":
-            lines.append(f"\n## Paper {i}: {title}")
-            if meta_line_str:
-                lines.append(f"*{meta_line_str}*\n")
-        else:
-            lines.append(f"\nPaper {i}: {title}")
-            if meta_line_str:
-                lines.append(f"{meta_line_str}")
-            lines.append("Summary:")
+        lines.append("\n--- End of Table of Contents ---\n")
+        logger.info("📚 TOC created successfully")
 
-        lines.append(paper.get("summary", "[No summary available]").strip())
+        # --- Full Summaries ---
+        for i, paper in enumerate(summaries, 1):
+            title = paper.get('title', f"Paper {i}")
+            metadata = paper.get("metadata", {})
 
-    if return_as_string:
-        return "\n".join(lines)
+            meta_line = []
+            if metadata.get("year"):
+                meta_line.append(f"Year: {metadata['year']}")
+            if metadata.get("journal"):
+                meta_line.append(f"Journal: {metadata['journal']}")
+            if metadata.get("authors"):
+                meta_line.append(f"Authors: {metadata['authors']}")
+            meta_line_str = " | ".join(meta_line)
 
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+            if format == "md":
+                lines.append(f"\n## Paper {i}: {title}")
+                if meta_line_str:
+                    lines.append(f"*{meta_line_str}*\n")
+            else:
+                lines.append(f"\nPaper {i}: {title}")
+                if meta_line_str:
+                    lines.append(f"{meta_line_str}")
+                lines.append("Summary:")
 
-    print(f"💾 Report saved as: {output_path}\n")
+            lines.append(paper.get("summary", "[No summary available]").strip())
+
+        if return_as_string:
+            return "\n".join(lines)
+
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+
+        logger.info(f"💾 Report saved as: {output_path}\n")
+
+    except Exception as e:
+        logger.error(f"❌ Failed to generate report: {e}")
 
 def generate_markdown_report(summaries, goal):
     report = []
