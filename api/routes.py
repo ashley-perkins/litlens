@@ -7,6 +7,8 @@ from utils.pdf_utils import extract_pdf_metadata
 import os
 from fastapi.responses import JSONResponse
 import logging
+from typing import List, Dict, Any
+
 
 # === Configure logger ===
 logging.basicConfig(level=logging.INFO)
@@ -106,3 +108,19 @@ def summarize_pdfs(request: PDFSummarizationRequest):
     except Exception as e:
         logger.error(f"❌ Summarization pipeline failed: {e}")
         raise HTTPException(status_code=500, detail=f"Summarization pipeline failed: {str(e)}")
+
+# === Report Markdown Export ===
+class ReportRequest(BaseModel):
+    goal: str
+    summaries: List[Dict[str, Any]]
+
+@router.post("/report")
+def generate_report(request: ReportRequest):
+    try:
+        logger.info("📝 Report generation endpoint hit.")
+        report = report_generator.generate_markdown_report(request.summaries, request.goal)
+        logger.info("✅ Markdown report generated successfully.")
+        return {"report": report}
+    except Exception as e:
+        logger.error(f"❌ Failed to generate markdown report: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate markdown report: {str(e)}")
