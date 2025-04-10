@@ -10,35 +10,38 @@ pinned: true
 
 # 🧠📚 LitLens
 
-_A Lightweight AI-Powered Literature Review Assistant_
+**A Lightweight AI-Powered Literature Review Assistant**
+
+---
+
+## 🎯 Description
 
 > “Designed to summarize, structure, and surface scientific insights with clarity and speed.”
 
-![LitLens Banner](https://user-images.githubusercontent.com/your-github-username/banner-placeholder.png)
+---
+
+![LitLens Banner](coming soon)
 
 ---
 
 ## ✅ Current Status
 
-LitLens backend is **running on Hugging Face** using **FastAPI** and Docker.
+The **LitLens backend is live on Hugging Face**, powered by **FastAPI** and **Docker**.
 
-You can test the API using Swagger UI at:
-
-/docs
-
-Or use the deployed summarization endpoint:
-
-/summarize-hf
+You can interact with it via Swagger UI:
+[https://ashley-perkins-litlens.hf.space/docs](https://ashley-perkins-litlens.hf.space/docs)
 
 ---
 
 ## 🔧 Available Endpoints
 
-`POST /summarize-hf`
+### `POST /summarize-hf`
 
 Summarizes a short paragraph of text using a Hugging Face transformer model.
 
-#### Payload:
+---
+
+#### ✅ Sample Payload:
 
 ```json
 {
@@ -46,72 +49,76 @@ Summarizes a short paragraph of text using a Hugging Face transformer model.
   "content": "The presence of alpha-synuclein in the appendix..."
 }
 
-Returns:
-
+✅ Sample Response:
 {
   "goal": "Identify appendix proteins",
   "summary": "Alpha-synuclein in the appendix suggests a potential link to Parkinson’s."
 }
 
 GET /
-Root route — sanity check for uptime.
+Root route – simple uptime check.
+
 Returns a confirmation message that the backend is live.
 
-🧪 Upcoming Features
-Feature	Status
-Summarize full folders of PDFs	🔜 In development
-Embed + filter findings by goal	🔜 In development
-Generate downloadable .md reports	🔜 In development
-Handle API key + token overflow	✅ Local complete
+🔬 Upcoming Features
+Feature
+
+Status
+
+Summarize full folders of PDFs
+
+🔜 In development
+
+Embed + filter findings by goal
+
+🔜 In development
+
+Generate downloadable .md reports
+
+🔜 In development
+
+Handle token overflow + rate limit
+
+✅ Completed locally
 
 🛠️ Built With
-FastAPI – for blazing-fast backend API
+FastAPI – blazing-fast API framework
 
 Hugging Face Transformers – for abstractive summarization
 
-Docker – for deployment to Hugging Face Spaces
+Docker – deployment to Hugging Face Spaces
 
-🤝 Contributing
-This is a WIP MVP. Feature requests and feedback welcome —
-LitLens is being actively developed and expanded!
-
-📄 License
-MIT License
-
-
----
-
-## 🔍 API Documentation
-
-The LitLens API is live and documented with Swagger UI.
-
-👉 **Explore the API here**:  
-https://ashley-perkins-litlens.hf.space/docs](https://ashley-perkins-litlens.hf.space/docs)
-
-You can test all three endpoints directly in the browser:
-
-| Endpoint           | Method | Description                                 |
-|--------------------|--------|---------------------------------------------|
-| `/summarize`       | POST   | Summarize a block of inline text.           |
-| `/summarize-hf`    | POST   | Use Hugging Face model to summarize text.   |
-| `/summarize-pdfs`  | POST   | Summarize PDFs uploaded to `test_pdfs/`.    |
-
----
-
-### 🧪 Example Request (via `/summarize-hf`)
-
-```json
+🧪 Example Request (via /summarize-hf)
 POST /summarize-hf
+```json
 {
   "goal": "Understand how gut microbiota impacts immune function",
-  "content": "The gut microbiota plays a crucial role in modulating immune responses.."
+  "content": "The gut microbiota plays a crucial role in modulating immune responses..."
 }
 
 📄 Want to Run It Locally?
-Clone the repo
+Clone this repo
 
-Add your OPENAI_API_KEY to .env
+Add your OpenAI and/or Hugging Face API keys to .env
 
-Run locally with uvicorn app:app --reload --port 7860
+Run locally:
 
-Then access: http://127.0.0.1:7860/docs
+uvicorn app:app --reload --port 7860
+
+Then open:
+
+http://127.0.0.1:7860/docs
+
+🤝 Contributing
+This is a WIP MVP! Feedback, suggestions, and PRs are welcome.
+
+LitLens is being actively developed and expanded — your ideas are valued.
+
+
+---
+
+📜 License
+MIT License
+
+
+Respect the original work. Forks are welcome, but commercial use or redistribution without significant modification and written permission is prohibited.
