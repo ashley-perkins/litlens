@@ -43,3 +43,17 @@ def extract_text_from_folder(folder_path):
             print(f"❌ Failed to extract from {filename}: {e}")
     
     return papers
+
+def extract_text_from_pdf(file_path):
+    try:
+        text = extract_text(file_path)
+        return {
+            "filename": os.path.basename(file_path),
+            "content": text
+        }
+    except Exception as e:
+        print(f"❌ Failed to extract from {file_path}: {e}")
+        return {
+            "filename": os.path.basename(file_path),
+            "content": ""
+        }
