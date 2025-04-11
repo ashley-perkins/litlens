@@ -36,7 +36,7 @@ export default function DownloadReport({ goal, summaries }) {
     <div className="mt-4">
       <button
         onClick={handleDownload}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 inline-flex items-center"
+        className="download-btn"
       >
         <span role="img" aria-label="download">📥</span>&nbsp;Download Full Report
       </button>

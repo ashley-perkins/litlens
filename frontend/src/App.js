@@ -5,6 +5,8 @@ import SubmitButton from './SubmitButton';
 import SummaryDisplay from './SummaryDisplay';
 import DownloadReport from './DownloadReport';
 
+
+
 function App() {
   const [files, setFiles] = useState([]);
   const [goal, setGoal] = useState('');
@@ -51,17 +53,28 @@ function App() {
   };
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">LitLens</h1>
-      <UploadArea onFileChange={handleFileChange} />
-      <GoalInput goal={goal} onGoalChange={handleGoalChange} />
-      <SubmitButton onClick={handleSubmit} disabled={loading || files.length === 0} />
+    <>
+      <div className="container">
+        <h1 className="title">LitLens</h1>
+        <UploadArea onFileChange={handleFileChange} />
+        <GoalInput goal={goal} onGoalChange={handleGoalChange} />
+        <SubmitButton onClick={handleSubmit} disabled={loading || files.length === 0} />
   
-      {loading && <p className="mt-4 text-blue-600">Summarizing… please wait ✨</p>}
-      {error && <p className="mt-4 text-red-600">{error}</p>}
+        {loading && (
+          <p className="status loading">
+            <span className="spinner" /> Summarizing... please wait
+          </p>
+        )}
   
-      <SummaryDisplay summaries={summaries} />
-      {reportPath && <DownloadReport goal={goal} summaries={summaries} />}
-    </div>
+        {error && <p className="status error">{error}</p>}
+  
+        <SummaryDisplay summaries={summaries} />
+        {reportPath && <DownloadReport goal={goal} summaries={summaries} />}
+      </div>
+  
+      <footer className="footer">
+        <p>Built by Ashley Perkins · LitLens v1.0 · 2025</p>
+      </footer>
+    </>
   );}
 export default App;
