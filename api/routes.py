@@ -1,14 +1,14 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from modules import summarizer, pdf_extractor, embedder, relevance_filter, report_generator
 from utils import output_writer
 from utils import hf_utils
 from utils.pdf_utils import extract_pdf_metadata
 import os
-from fastapi.responses import JSONResponse
+import tempfile
 import logging
 from typing import List, Dict, Any
-
+from fastapi.responses import JSONResponse
 
 # === Configure logger ===
 logging.basicConfig(level=logging.INFO)
@@ -61,46 +61,51 @@ def root():
         }
     )
 
-# === Full Folder Summarization ===
-class PDFSummarizationRequest(BaseModel):
-    goal: str
-    folder_path: str
-
+# === Full File Upload Summarization ===
 @router.post("/summarize-pdfs")
-def summarize_pdfs(request: PDFSummarizationRequest):
+async def summarize_uploaded_pdfs(
+    files: List[UploadFile] = File(...),
+    goal: str = Form("")
+):
     try:
-        logger.info(f"📁 Starting full summarization pipeline for folder: {request.folder_path}")
+        logger.info(f"📁 Starting LitLens pipeline on uploaded files with goal: {goal}")
 
-        if not os.path.exists(request.folder_path):
-            logger.warning("⚠️ Input directory not found.")
-            raise HTTPException(status_code=404, detail="Input directory not found.")
+        if not files:
+            logger.warning("⚠️ No files received from request.")
+            raise HTTPException(status_code=400, detail="No files uploaded.")
 
-        # 1. Extract PDFs
-        papers = pdf_extractor.extract_text_from_folder(request.folder_path)
-        if not papers:
-            logger.warning("⚠️ No valid PDFs found in directory.")
+        extracted_papers = []
+        for file in files:
+            suffix = os.path.splitext(file.filename)[-1]
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+                tmp.write(await file.read())
+                tmp_path = tmp.name
+
+            paper = pdf_extractor.extract_text_from_pdf(tmp_path)
+            extracted_papers.append(paper)
+            os.remove(tmp_path)
+
+        if not extracted_papers:
+            logger.warning("⚠️ No valid PDFs extracted from uploads.")
             raise HTTPException(status_code=400, detail="No valid PDFs found.")
 
-        # 2. Embed & Filter
-        logger.info("🔎 Embedding and filtering papers for relevance")
-        goal_embedding, paper_embeddings = embedder.embed_goal_and_papers(request.goal, papers)
+        logger.info("🔎 Embedding and filtering uploaded papers")
+        goal_embedding, paper_embeddings = embedder.embed_goal_and_papers(goal, extracted_papers)
         relevant_indexes = relevance_filter.filter_relevant_papers(goal_embedding, paper_embeddings, threshold=0.4)
-        relevant_papers = [papers[i] for i in relevant_indexes]
+        relevant_papers = [extracted_papers[i] for i in relevant_indexes]
 
         if not relevant_papers:
             logger.warning("⚠️ No papers matched the research goal.")
             raise HTTPException(status_code=404, detail="No papers matched the research goal.")
 
-        # 3. Summarize
         logger.info("📝 Summarizing relevant papers")
-        summaries = summarizer.summarize_papers(relevant_papers, request.goal)
+        summaries = summarizer.summarize_papers(relevant_papers, goal)
 
-        # 4 & 5. Export Summary to Output File (let it handle formatting)
-        output_path = output_writer.save_summary_to_file(summaries, request.goal)
+        output_path = output_writer.save_summary_to_file(summaries, goal)
         logger.info(f"✅ Report generated at {output_path}")
 
         return {
-            "goal": request.goal,
+            "goal": goal,
             "summaries": summaries,
             "output_path": output_path
         }
