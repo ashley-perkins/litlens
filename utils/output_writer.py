@@ -1,10 +1,8 @@
 import os
 from modules import report_generator
 
-# Use /data on HF Spaces; otherwise fallback to ../output
-HF_OUTPUT_DIR = "/data"
-LOCAL_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "output")
-BASE_OUTPUT_DIR = HF_OUTPUT_DIR if os.access(HF_OUTPUT_DIR, os.W_OK) else LOCAL_OUTPUT_DIR
+# Hugging Face safe output directory
+BASE_OUTPUT_DIR = "/tmp/litlens_outputs"
 
 def sanitize_filename(name):
     """
