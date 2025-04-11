@@ -15,7 +15,6 @@ function App() {
   const [summaries, setSummaries] = useState([]);
   const [error, setError] = useState('');
   const [reportPath, setReportPath] = useState('');
-
   const handleSubmit = async () => {
     setLoading(true);
     setError('');
@@ -65,5 +64,4 @@ function App() {
       {reportPath && <DownloadReport outputPath={reportPath} />}
     </div>
   );}
-
 export default App;
