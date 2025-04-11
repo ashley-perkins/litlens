@@ -61,7 +61,7 @@ function App() {
       {error && <p className="mt-4 text-red-600">{error}</p>}
   
       <SummaryDisplay summaries={summaries} />
-      {reportPath && <DownloadReport outputPath={reportPath} />}
+      {reportPath && <DownloadReport goal={goal} summaries={summaries} />}
     </div>
   );}
 export default App;
