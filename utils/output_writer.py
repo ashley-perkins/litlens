@@ -1,8 +1,9 @@
 import os
+import shutil
 from modules import report_generator
 
 # ✅ Set the output directory inside the static folder
-BASE_OUTPUT_DIR = os.path.join("static", "reports")
+BASE_OUTPUT_DIR = "./output"
 
 def sanitize_filename(name):
     return "_".join(name.strip().lower().split())
@@ -29,4 +30,7 @@ def save_summary_to_file(summaries, goal, output_dir=BASE_OUTPUT_DIR, format="md
         f.write(content)
 
     print(f"✅ Summary written to: {output_path}")
+    static_reports_dir = os.path.join("static", "reports")
+    os.makedirs(static_reports_dir, exist_ok=True)
+    shutil.copy(output_path, os.path.join(static_reports_dir, filename))
     return output_path
