@@ -3,9 +3,14 @@ import React from 'react';
 export default function DownloadReport({ outputPath }) {
   if (!outputPath) return null;
 
-  // Extract just the filename from the full path
+  // 🧠 Decide if the path is absolute (for Hugging Face /data) or local (static/reports)
+  const isHosted = outputPath.startsWith("/data/");
   const filename = outputPath.split('/').pop();
-  const downloadUrl = `/static/reports/${filename}`;
+
+  // 👇 Use either backend proxy download path (recommended for HF) or static path (local)
+  const downloadUrl = isHosted
+    ? `/download?path=${encodeURIComponent(outputPath)}` // Proxy route
+    : `/static/reports/${filename}`; // Local dev
 
   return (
     <div className="mt-4">
