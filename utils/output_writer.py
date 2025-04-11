@@ -2,7 +2,7 @@ import os
 from modules import report_generator
 
 # Hugging Face safe output directory
-BASE_OUTPUT_DIR = "/tmp/litlens_outputs"
+BASE_OUTPUT_DIR = "static/reports"
 
 def sanitize_filename(name):
     """

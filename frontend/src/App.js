@@ -3,6 +3,7 @@ import UploadArea from './UploadArea';
 import GoalInput from './GoalInput';
 import SubmitButton from './SubmitButton';
 import SummaryDisplay from './SummaryDisplay';
+import DownloadReport from './DownloadReport';
 
 function App() {
   const [files, setFiles] = useState([]);
@@ -13,6 +14,7 @@ function App() {
   const handleGoalChange = (e) => setGoal(e.target.value);
   const [summaries, setSummaries] = useState([]);
   const [error, setError] = useState('');
+  const [reportPath, setReportPath] = useState('');
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -38,7 +40,9 @@ function App() {
       }
   
       const result = await response.json();
-      setSummaries(Array.isArray(result) ? result : [result]); // just in case
+      console.log("🧠 Summary API result:", result);
+      setSummaries(result.summaries || []);
+      setReportPath(result.output_path || '')
     } catch (err) {
       console.error("JS Fetch Error:", err);
       setError('Something went wrong while summarizing. Please try again.');
@@ -58,6 +62,7 @@ function App() {
       {error && <p className="mt-4 text-red-600">{error}</p>}
   
       <SummaryDisplay summaries={summaries} />
+      {reportPath && <DownloadReport outputPath={reportPath} />}
     </div>
   );}
 
