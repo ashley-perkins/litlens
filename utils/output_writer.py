@@ -1,35 +1,30 @@
 import os
 from modules import report_generator
 
-# Hugging Face safe output directory
-BASE_OUTPUT_DIR = "static/reports"
+# ✅ Set the output directory inside the static folder
+BASE_OUTPUT_DIR = os.path.join("static", "reports")
 
 def sanitize_filename(name):
-    """
-    Replace or remove problematic characters from a string to make it safe for filenames.
-    """
     return "_".join(name.strip().lower().split())
 
 def save_summary_to_file(summaries, goal, output_dir=BASE_OUTPUT_DIR, format="md"):
-    """
-    Saves the generated summary report to a file in the specified format (markdown or text).
-    """
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)  # ✅ Create folder if it doesn't exist
+
     safe_goal = sanitize_filename(goal)
     filename = f"{safe_goal}_summary_report.{format}"
     output_path = os.path.join(output_dir, filename)
 
-    # Generate report content
-    if format == "md":
-        content = report_generator.generate_markdown_report(summaries, goal)
-    else:
-        content = report_generator.generate_report(summaries, goal, return_as_string=True)
+    # ✍️ Generate report content
+    content = (
+        report_generator.generate_markdown_report(summaries, goal)
+        if format == "md"
+        else report_generator.generate_report(summaries, goal, return_as_string=True)
+    )
 
-    # Ensure content is a string
     if isinstance(content, list):
         content = "\n".join(content)
 
-    # Write to file
+    # 📄 Write to file
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(content)
 
