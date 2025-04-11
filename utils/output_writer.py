@@ -23,6 +23,6 @@ def save_summary_to_file(summaries, goal, format="md"):
         f.write(content)
 
     print(f"✅ Summary written to: {output_path}")
-
-    # Instead of copying, return the download endpoint path
+    
+    # ✅ Return as download endpoint URL
     return f"/download?path={output_path}"
