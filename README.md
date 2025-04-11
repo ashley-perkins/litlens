@@ -8,117 +8,116 @@ app_file: app.py
 pinned: true
 ---
 
-# 🧠📚 LitLens
+🧠📚 LitLens
 
-**A Lightweight AI-Powered Literature Review Assistant**
+A Lightweight AI-Powered Literature Review Assistant
 
----
+“Designed to summarize, structure, and surface scientific insights with clarity and speed.”
 
-## 🎯 Description
+📌 Overview
 
-> “Designed to summarize, structure, and surface scientific insights with clarity and speed.”
+LitLens helps researchers, students, and reviewers transform PDFs into concise, structured summaries using AI. Built for speed and clarity, LitLens lets you:
 
----
+Upload single or multiple scientific PDFs
 
-![LitLens Banner](coming soon)
+Define a custom research goal (optional)
 
----
+Generate clean summaries using Hugging Face LLMs
 
-## ✅ Current Status
+Download a full Markdown report
 
-The **LitLens backend is live on Hugging Face**, powered by **FastAPI** and **Docker**.
+🚀 Live Deployment
 
-You can interact with it via Swagger UI:
-[https://ashley-perkins-litlens.hf.space/docs](https://ashley-perkins-litlens.hf.space/docs)
+LitLens is live and hosted on Hugging Face Spaces:
+🔗 https://ashley-perkins-litlens.hf.space
 
----
+Swagger UI for backend: https://ashley-perkins-litlens.hf.space/docs
 
-## 🔧 Available Endpoints
+✅ Current Status
 
-### `POST /summarize-hf`
+✅ Summary generation via Hugging Face Transformers
 
-Summarizes a short paragraph of text using a Hugging Face transformer model.
+✅ Multi-PDF support
 
----
+✅ Downloadable Markdown report
 
-#### ✅ Sample Payload:
+✅ Hugging Face + FastAPI deployment
 
-```json
+🔜 Citation organization + goal filtering
+
+🔜 Token overflow & rate limit improvements
+
+🔧 API Endpoints
+
+POST /summarize-hf
+
+Summarize a text passage with a given research goal using Hugging Face.
+
+Sample Payload:
+
 {
   "goal": "Identify appendix proteins",
   "content": "The presence of alpha-synuclein in the appendix..."
 }
 
-✅ Sample Response:
+Sample Response:
+
 {
   "goal": "Identify appendix proteins",
   "summary": "Alpha-synuclein in the appendix suggests a potential link to Parkinson’s."
 }
 
 GET /
-Root route – simple uptime check.
 
-Returns a confirmation message that the backend is live.
+Root endpoint. Confirms the backend is up.
 
-🔬 Upcoming Features
-Feature
+🛠 Built With
 
-Status
+FastAPI – Backend framework
 
-Summarize full folders of PDFs
+Hugging Face Transformers – LLM for summarization
 
-🔜 In development
+Docker – Containerized deployment
 
-Embed + filter findings by goal
+React – Frontend UI
 
-🔜 In development
+📄 Local Setup
 
-Generate downloadable .md reports
+🔁 Clone the repo
 
-🔜 In development
+git clone https://github.com/yourname/litlens.git
+cd litlens
 
-Handle token overflow + rate limit
+🧠 Backend
 
-✅ Completed locally
+cd backend
+pip install -r requirements.txt
+uvicorn app:app --reload --port 7860
 
-🛠️ Built With
-FastAPI – blazing-fast API framework
+💻 Frontend
 
-Hugging Face Transformers – for abstractive summarization
+cd frontend
+npm install
+npm start
 
-Docker – deployment to Hugging Face Spaces
+App available at localhost:3000
+Backend API at localhost:7860
 
-🧪 Example Request (via /summarize-hf)
-POST /summarize-hf
-```json
+🧪 Example Request
+
 {
   "goal": "Understand how gut microbiota impacts immune function",
   "content": "The gut microbiota plays a crucial role in modulating immune responses..."
 }
 
-📄 Want to Run It Locally?
-Clone this repo
-
-Add your OpenAI and/or Hugging Face API keys to .env
-
-Run locally:
-
-uvicorn app:app --reload --port 7860
-
-Then open:
-
-http://127.0.0.1:7860/docs
-
 🤝 Contributing
-This is a WIP MVP! Feedback, suggestions, and PRs are welcome.
 
-LitLens is being actively developed and expanded — your ideas are valued.
+LitLens is in active development! Feedback, ideas, and PRs are welcome.
 
-
----
+This is an early MVP with more features on the way.
 
 📜 License
+
 MIT License
 
-
-Respect the original work. Forks are welcome, but commercial use or redistribution without significant modification and written permission is prohibited.
+Respect the original work. Forks welcome — but redistribution without significant modification or written permission is discouraged.
