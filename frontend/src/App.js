@@ -28,13 +28,19 @@ function App() {
         method: 'POST',
         body: formData,
       });
-
-      if (!response.ok) throw new Error('Failed to fetch summary.');
+  
+      console.log("Raw fetch response:", response);
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Server error response:", errorText);
+        throw new Error('Failed to fetch summary.');
+      }
   
       const result = await response.json();
       setSummaries(Array.isArray(result) ? result : [result]); // just in case
     } catch (err) {
-      console.error(err);
+      console.error("JS Fetch Error:", err);
       setError('Something went wrong while summarizing. Please try again.');
     } finally {
       setLoading(false);
