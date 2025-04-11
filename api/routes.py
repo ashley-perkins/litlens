@@ -64,8 +64,8 @@ def root():
 # === Full File Upload Summarization ===
 @router.post("/summarize-pdfs")
 async def summarize_uploaded_pdfs(
-    files: List[UploadFile] = File(...),
-    goal: str = Form("")
+    files: List[UploadFile] = File(..., description="PDF files to summarize"),
+    goal: str = Form("", description="Research goal to guide summarization")
 ):
     try:
         logger.info(f"📁 Starting LitLens pipeline on uploaded files with goal: {goal}")
