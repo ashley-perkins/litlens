@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from api.routes import router
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
+
 load_dotenv()
 
 app = FastAPI(
@@ -11,6 +13,9 @@ app = FastAPI(
     redoc_url=None,                # optional: disables ReDoc
     openapi_url="/openapi.json"    # 👈 explicitly expose schema
 )
+
+# ✅ Serve files like /static/reports/my_report.md
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include your routes
 app.include_router(router)

@@ -9,6 +9,8 @@ import tempfile
 import logging
 from typing import List, Dict, Any
 from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse
+from fastapi import Query
 
 # === Configure logger ===
 logging.basicConfig(level=logging.INFO)
@@ -129,3 +131,10 @@ def generate_report(request: ReportRequest):
     except Exception as e:
         logger.error(f"❌ Failed to generate markdown report: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate markdown report: {str(e)}")
+
+@router.get("/download")
+async def download_file(path: str = Query(..., description="Path to the file on server")):
+    try:
+        return FileResponse(path, media_type="application/octet-stream", filename=os.path.basename(path))
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"File not found: {e}")
