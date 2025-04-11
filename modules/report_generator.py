@@ -98,6 +98,8 @@ def generate_report(summaries, goal, output_path="litlens_summary_report.txt", f
     except Exception as e:
         logger.error(f"❌ Failed to generate report: {e}")
 
+
+
 def generate_markdown_report(summaries, goal):
     report = []
 

@@ -11,6 +11,7 @@ from typing import List, Dict, Any
 from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 from fastapi import Query
+from utils.output_writer import sanitize_filename
 
 # === Configure logger ===
 logging.basicConfig(level=logging.INFO)
@@ -121,13 +122,24 @@ class ReportRequest(BaseModel):
     goal: str
     summaries: List[Dict[str, Any]]
 
+
 @router.post("/report")
 def generate_report(request: ReportRequest):
     try:
-        logger.info("📝 Report generation endpoint hit.")
+        logger.info("📄 Report generation endpoint hit.")
         report = report_generator.generate_markdown_report(request.summaries, request.goal)
-        logger.info("✅ Markdown report generated successfully.")
-        return {"report": report}
+
+        # Save to temp file
+        safe_goal = sanitize_filename(request.goal)
+        filename = f"{safe_goal}_summary_report.md"
+        output_path = os.path.join(tempfile.gettempdir(), filename)
+
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(report)
+
+        logger.info("✅ Markdown report generated and saved.")
+        return FileResponse(output_path, media_type="text/markdown", filename=filename)
+
     except Exception as e:
         logger.error(f"❌ Failed to generate markdown report: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to generate markdown report: {str(e)}")
