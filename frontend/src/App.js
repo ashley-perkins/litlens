@@ -24,7 +24,7 @@ function App() {
     formData.append('goal', goal);
   
     try {
-      const response = await fetch('https://ashley-perkins--litlens.hf.space/summarize-pdfs', {
+      const response = await fetch('https://ashley-perkins-litlens.hf.space/summarize-pdfs', {
         method: 'POST',
         body: formData,
       });
