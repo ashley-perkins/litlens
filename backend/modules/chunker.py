@@ -4,7 +4,7 @@ import re
 import tiktoken
 import logging
 
-from config import ChunkerConfig
+from backend.config import ChunkerConfig
 
 # Only show WARNINGS by default
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
