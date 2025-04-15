@@ -15,7 +15,7 @@ app = FastAPI(
 )
 
 # ✅ Serve files like /static/reports/my_report.md
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 
 # Include your routes
 app.include_router(router)

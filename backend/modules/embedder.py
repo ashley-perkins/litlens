@@ -4,7 +4,7 @@ import re
 import tiktoken
 import logging
 import os
-from config import ChunkerConfig
+from backend.config import ChunkerConfig
 from openai import OpenAI  
 from dotenv import load_dotenv
 
