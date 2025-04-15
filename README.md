@@ -92,7 +92,7 @@ cd litlens
 
 cd backend
 pip install -r requirements.txt
-uvicorn app:app --reload --port 7860
+uvicorn backend.app:app --reload --port 7860
 
 💻 Frontend
 
@@ -112,7 +112,7 @@ Backend API at localhost:7860
 
 🤝 Contributing
 
-LitLens is in active development! Feedback, ideas, and PRs are welcome.
+We're excited to collaborate! Feel free to openissues, suggest features, or contribute PRs.
 
 This is an early MVP with more features on the way.
 
