@@ -1,6 +1,6 @@
 import os
 from pdfminer.high_level import extract_text
-from utils.pdf_utils import extract_pdf_metadata
+from backend.utils.pdf_utils import extract_pdf_metadata
 
 def extract_papers(pdf_folder):
     papers = []

@@ -1,6 +1,6 @@
 import os
 import tempfile
-from modules import report_generator
+from backend.modules import report_generator
 
 def sanitize_filename(name):
     return "_".join(name.strip().lower().split())

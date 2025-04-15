@@ -1,6 +1,6 @@
 import logging
-from modules import chunker
-from utils.pdf_utils import extract_title_from_text
+from backend.modules import chunker
+from backend.utils.pdf_utils import extract_title_from_text
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 

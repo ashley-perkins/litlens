@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from modules import pdf_extractor, embedder, relevance_filter, summarizer, report_generator
+from backend.modules import pdf_extractor, embedder, relevance_filter, summarizer, report_generator
 
 # ----------------------
 # Argument Parser

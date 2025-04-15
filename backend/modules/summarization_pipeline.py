@@ -1,8 +1,8 @@
 import os
-from modules import pdf_extractor, embedder, relevance_filter, summarizer
-from utils.pdf_utils import extract_text_from_pdf
+from backend.modules import pdf_extractor, embedder, relevance_filter, summarizer
+from backend.utils.pdf_utils import extract_text_from_pdf
 from dotenv import load_dotenv
-from utils.output_writer import save_summary_to_file
+from backend.utils.output_writer import save_summary_to_file
 
 # Ensure .env is loaded (needed for OpenAI API key)
 load_dotenv()

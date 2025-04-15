@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 import os
 import tiktoken
 import time
-from modules import chunker
-from utils.pdf_utils import extract_title_from_text, extract_pdf_metadata
+from backend.modules import chunker
+from backend.utils.pdf_utils import extract_title_from_text, extract_pdf_metadata
 
 # Load API key from .env
 load_dotenv()

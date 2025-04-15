@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
-from modules import summarizer, pdf_extractor, embedder, relevance_filter, report_generator
-from utils import output_writer
-from utils import hf_utils
-from utils.pdf_utils import extract_pdf_metadata
+from backend.modules import summarizer, pdf_extractor, embedder, relevance_filter, report_generator
+from backend.utils import output_writer
+from backend.utils import hf_utils
+from backend.utils.pdf_utils import extract_pdf_metadata
 import os
 import tempfile
 import logging
@@ -11,7 +11,7 @@ from typing import List, Dict, Any
 from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 from fastapi import Query
-from utils.output_writer import sanitize_filename
+from backend.utils.output_writer import sanitize_filename
 
 # === Configure logger ===
 logging.basicConfig(level=logging.INFO)
