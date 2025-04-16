@@ -1,18 +1,23 @@
-
 # utils/embedder_hf.py
 
-from sentence_transformers import SentenceTransformer
+from transformers import AutoTokenizer, AutoModel
+import torch
 import logging
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-# Load HF embedding model (free-tier available)
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+# Load HF embedding model (compatible with HF Spaces)
+MODEL_NAME = "thenlper/gte-small"
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModel.from_pretrained(MODEL_NAME)
 
-def embed_text(text: str):
+def embed_text(text: str) -> list:
     try:
-        logging.info("🔍 Generating HF embedding...")
-        embedding = model.encode(text, convert_to_numpy=True).tolist()
+        logging.info("🌐 Generating HF embedding...")
+        inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+        with torch.no_grad():
+            outputs = model(**inputs)
+            embedding = outputs.last_hidden_state.mean(dim=1).squeeze().tolist()
         return embedding
     except Exception as e:
         logging.error(f"❌ HF embedding failed: {e}")
