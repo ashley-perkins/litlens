@@ -6,19 +6,20 @@ import logging
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-# Load HF embedding model (compatible with HF Spaces)
-MODEL_NAME = "thenlper/gte-small"
+# Load HF embedding model (fully compatible)
+MODEL_NAME = "intfloat/e5-small-v2"
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModel.from_pretrained(MODEL_NAME)
 
-def embed_text(text: str) -> list:
+def embed_text(text: str):
     try:
-        logging.info("🌐 Generating HF embedding...")
-        inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+        logging.info("🔵 Generating HF embedding with intfloat/e5-small-v2...")
+        inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
         with torch.no_grad():
             outputs = model(**inputs)
-            embedding = outputs.last_hidden_state.mean(dim=1).squeeze().tolist()
-        return embedding
+        # Mean pooling
+        embeddings = outputs.last_hidden_state.mean(dim=1)
+        return embeddings[0].tolist()
     except Exception as e:
         logging.error(f"❌ HF embedding failed: {e}")
         raise
