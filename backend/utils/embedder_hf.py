@@ -1,3 +1,5 @@
+# utils/embedder_hf.py
+
 from sentence_transformers import SentenceTransformer
 import logging
 import os
@@ -7,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 # Set writable Hugging Face cache directory
 os.environ["HF_HOME"] = "/tmp/huggingface"
 
-# Use model name without the "sentence-transformers/" prefix
+# Load HF embedding model (fully compatible with Hugging Face Spaces)
 MODEL_NAME = "all-MiniLM-L6-v2"
 model = SentenceTransformer(MODEL_NAME)
 
