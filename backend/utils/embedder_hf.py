@@ -1,16 +1,17 @@
-# utils/embedder_hf.py
-
 from sentence_transformers import SentenceTransformer
 import logging
+import os
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/hf_cache"
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-# ✅ Lightweight, Space-safe HF model
-model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L3-v2")
+# Use a known-safe model for Hugging Face Spaces
+MODEL_NAME = "intfloat/e5-small-v2"
+model = SentenceTransformer(MODEL_NAME)
 
 def embed_text(text: str):
     try:
-        logging.info("🔵 Generating HF embedding with MiniLM-L3-v2...")
+        logging.info("🔵 Generating HF embedding with intfloat/e5-small-v2...")
         embedding = model.encode(text, convert_to_numpy=True).tolist()
         return embedding
     except Exception as e:
