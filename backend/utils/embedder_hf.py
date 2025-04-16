@@ -1,25 +1,18 @@
 # utils/embedder_hf.py
 
-from transformers import AutoTokenizer, AutoModel
-import torch
+from sentence_transformers import SentenceTransformer
 import logging
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-# Load HF embedding model (fully compatible)
-MODEL_NAME = "intfloat/e5-small-v2"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModel.from_pretrained(MODEL_NAME)
+# ✅ Lightweight, Space-safe HF model
+model = SentenceTransformer("sentence-transformers/paraphrase-MiniLM-L3-v2")
 
 def embed_text(text: str):
     try:
-        logging.info("🔵 Generating HF embedding with intfloat/e5-small-v2...")
-        inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
-        with torch.no_grad():
-            outputs = model(**inputs)
-        # Mean pooling
-        embeddings = outputs.last_hidden_state.mean(dim=1)
-        return embeddings[0].tolist()
+        logging.info("🔵 Generating HF embedding with MiniLM-L3-v2...")
+        embedding = model.encode(text, convert_to_numpy=True).tolist()
+        return embedding
     except Exception as e:
         logging.error(f"❌ HF embedding failed: {e}")
         raise
