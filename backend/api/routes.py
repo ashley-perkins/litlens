@@ -12,6 +12,8 @@ from fastapi.responses import JSONResponse
 from fastapi.responses import FileResponse
 from fastapi import Query
 from backend.utils.output_writer import sanitize_filename
+from backend.utils.hf_utils import summarize_text_with_hf_api
+from backend.utils import embedder_hf
 
 # === Configure logger ===
 logging.basicConfig(level=logging.INFO)
@@ -24,19 +26,21 @@ class SummarizeRequest(BaseModel):
     goal: str
     content: str
 
-@router.post("/summarize")
-def summarize_text(request: SummarizeRequest):
-    try:
-        logger.info("🔹 Inline summarization started")
-        summary = summarizer.summarize_inline_text(request.content, request.goal)
-        logger.info("✅ Inline summarization completed")
-        return {
-            "goal": request.goal,
-            "summary": summary
-        }
-    except Exception as e:
-        logger.error(f"❌ Inline summarization failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Summarization failed: {str(e)}")
+# 🚧 Route temporarily disabled to prevent public OpenAI API Usage
+# 💡Re-enable when usage controls are in place
+#@router.post("/summarize")
+#def summarize_text(request: SummarizeRequest):
+#    try:
+#        logger.info("🔹 Inline summarization started")
+#        summary = summarizer.summarize_inline_text(request.content, request.goal)
+#        logger.info("✅ Inline summarization completed")
+#        return {
+#            #"goal": request.goal,
+#            #"summary": summary
+#        }
+#    except Exception as e:
+#        logger.error(f"❌ Inline summarization failed: {e}")
+#        raise HTTPException(status_code=500, detail=f"Summarization failed: {str(e)}")
 
 # === Hugging Face Summarization ===
 @router.post("/summarize-hf")
@@ -64,58 +68,62 @@ def root():
         }
     )
 
+# 🚧 Route temporarily disabled to prevent public OpenAI API Usage
+# 💡Re-enable when usage controls are in place
 # === Full File Upload Summarization ===
-@router.post("/summarize-pdfs")
-async def summarize_uploaded_pdfs(
-    files: List[UploadFile] = File(..., description="PDF files to summarize"),
-    goal: str = Form("", description="Research goal to guide summarization")
-):
-    try:
-        logger.info(f"📁 Starting LitLens pipeline on uploaded files with goal: {goal}")
 
-        if not files:
-            logger.warning("⚠️ No files received from request.")
-            raise HTTPException(status_code=400, detail="No files uploaded.")
+#@router.post("/summarize-pdfs")
+#async def summarize_uploaded_pdfs(
+#    files: List[UploadFile] = File(..., description="PDF files to summarize"),
+#    goal: str = Form("", description="Research goal to guide summarization")
+#):
+#    try:
+#        logger.info(f"📁 Starting LitLens pipeline on uploaded files with goal: {goal}")
+#
+#        if not files:
+#            logger.warning("⚠️ No files received from request.")
+#            raise HTTPException(status_code=400, detail="No files uploaded.")
+#
+#        extracted_papers = []
+#        for file in files:
+#            suffix = os.path.splitext(file.filename)[-1]
+#            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+#                tmp.write(await file.read())
+#                tmp_path = tmp.name
 
-        extracted_papers = []
-        for file in files:
-            suffix = os.path.splitext(file.filename)[-1]
-            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-                tmp.write(await file.read())
-                tmp_path = tmp.name
 
-            paper = pdf_extractor.extract_text_from_pdf(tmp_path)
-            extracted_papers.append(paper)
-            os.remove(tmp_path)
+#            paper = pdf_extractor.extract_text_from_pdf(tmp_path)
+#            extracted_papers.append(paper)
+#            os.remove(tmp_path)
 
-        if not extracted_papers:
-            logger.warning("⚠️ No valid PDFs extracted from uploads.")
-            raise HTTPException(status_code=400, detail="No valid PDFs found.")
+#        if not extracted_papers:
+#            logger.warning("⚠️ No valid PDFs extracted from uploads.")
+#            raise HTTPException(status_code=400, detail="No valid PDFs found.")
 
-        logger.info("🔎 Embedding and filtering uploaded papers")
-        goal_embedding, paper_embeddings = embedder.embed_goal_and_papers(goal, extracted_papers)
-        relevant_indexes = relevance_filter.filter_relevant_papers(goal_embedding, paper_embeddings, threshold=0.4)
-        relevant_papers = [extracted_papers[i] for i in relevant_indexes]
+#        logger.info("🔎 Embedding and filtering uploaded papers")
+#        goal_embedding, paper_embeddings = embedder.embed_goal_and_papers(goal, extracted_papers)
+#        relevant_indexes = relevance_filter.filter_relevant_papers(goal_embedding, paper_embeddings, threshold=0.4)
+#        relevant_papers = [extracted_papers[i] for i in relevant_indexes]
 
-        if not relevant_papers:
-            logger.warning("⚠️ No papers matched the research goal.")
-            raise HTTPException(status_code=404, detail="No papers matched the research goal.")
+#        if not relevant_papers:
+#            logger.warning("⚠️ No papers matched the research goal.")
+#            raise HTTPException(status_code=404, detail="No papers matched the research goal.")
 
-        logger.info("📝 Summarizing relevant papers")
-        summaries = summarizer.summarize_papers(relevant_papers, goal)
+#        logger.info("📝 Summarizing relevant papers")
+#        summaries = summarizer.summarize_papers(relevant_papers, goal)
+#
+#        output_path = output_writer.save_summary_to_file(summaries, goal)
+#        logger.info(f"✅ Report generated at {output_path}")
 
-        output_path = output_writer.save_summary_to_file(summaries, goal)
-        logger.info(f"✅ Report generated at {output_path}")
+#        return {
+#            "goal": goal,
+#            "summaries": summaries,
+#            "output_path": output_path
+#        }
 
-        return {
-            "goal": goal,
-            "summaries": summaries,
-            "output_path": output_path
-        }
-
-    except Exception as e:
-        logger.error(f"❌ Summarization pipeline failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Summarization pipeline failed: {str(e)}")
+#    except Exception as e:
+#        logger.error(f"❌ Summarization pipeline failed: {e}")
+#        raise HTTPException(status_code=500, detail=f"Summarization pipeline failed: {str(e)}")
 
 # === Report Markdown Export ===
 class ReportRequest(BaseModel):
@@ -150,3 +158,56 @@ async def download_file(path: str = Query(..., description="Path to the file on 
         return FileResponse(path, media_type="application/octet-stream", filename=os.path.basename(path))
     except Exception as e:
         raise HTTPException(status_code=404, detail=f"File not found: {e}")
+
+@router.post("/summarize-hf-pdfs")
+async def summarize_with_huggingface_pdfs(
+    files: List[UploadFile] = File(..., description="PDF files to summarize"),
+    goal: str = Form("", description="Research goal to guide summarization")
+):
+    try:
+        logging.info(f"📚 Starting HF pipeline with goal: {goal}")
+
+        # === Extract Text ===
+        extracted_papers = []
+        for file in files:
+            suffix = os.path.splitext(file.filename)[-1]
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+                tmp.write(await file.read())
+                tmp_path = tmp.name
+            paper = pdf_extractor.extract_text_from_pdf(tmp_path)
+            extracted_papers.append(paper)
+            os.remove(tmp_path)
+
+        if not extracted_papers:
+            raise HTTPException(status_code=400, detail="No valid PDFs extracted.")
+
+        # === Embed & Filter ===
+        goal_embedding, paper_embeddings = embedder_hf.embed_goal_and_papers(goal, extracted_papers)
+        relevant_indexes = relevance_filter.filter_relevant_papers(goal_embedding, paper_embeddings)
+        relevant_papers = [extracted_papers[i] for i in relevant_indexes]
+
+        if not relevant_papers:
+            raise HTTPException(status_code=404, detail="No papers matched the research goal.")
+
+        # === Summarize via Hugging Face ===
+        summaries = []
+        for paper in relevant_papers:
+            summary_text = await summarize_text_with_hf_api(paper.content, model_name="facebook/bart-large-cnn")
+            summaries.append({
+                "filename": paper.filename,
+                "title": paper.title,
+                "summary": summary_text
+            })
+
+        # === Generate Report ===
+        output_path = output_writer.save_summary_to_file(summaries, goal)
+
+        return {
+            "goal": goal,
+            "summaries": summaries,
+            "output_path": output_path
+        }
+
+    except Exception as e:
+        logging.error(f"❌ HF summarization failed: {e}")
+        raise HTTPException(status_code=500, detail=f"HF summarization failed: {str(e)}")

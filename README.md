@@ -18,13 +18,10 @@ A Lightweight AI-Powered Literature Review Assistant
 
 LitLens helps researchers, students, and reviewers transform PDFs into concise, structured summaries using AI. Built for speed and clarity, LitLens lets you:
 
-Upload single or multiple scientific PDFs
-
-Define a custom research goal (optional)
-
-Generate clean summaries using Hugging Face LLMs
-
-Download a full Markdown report
+- Upload one or more scientific PDFs
+- Define a custom research goal (optional)
+- Generate clean summaries using Hugging Face LLMs
+- Download a full Markdown report
 
 🚀 Live Deployment
 
@@ -35,7 +32,9 @@ Swagger UI for backend: https://ashley-perkins-litlens.hf.space/docs
 
 ✅ Current Status
 
-✅ Summary generation via Hugging Face Transformers
+✅ Summary generation via Hugging Face Transformers (default)
+⚠️ OpenAI-based summarization suspended (for internal use only)
+
 
 ✅ Multi-PDF support
 
@@ -67,6 +66,17 @@ Sample Response:
   "summary": "Alpha-synuclein in the appendix suggests a potential link to Parkinson’s."
 }
 
+
+ POST /summarize-hf-pdfs
+
+ Summarize pdf inputs with a given research goal using Hugging Face. 
+
+# POST /summarize
+# (Currently disabled - used only for internal testing with OpenAI API)
+
+# POST /summarize-pdfs
+# (Currently disabled - used only for internal testing with OpenAI API)
+
 GET /
 
 Root endpoint. Confirms the backend is up.
@@ -85,7 +95,7 @@ React – Frontend UI
 
 🔁 Clone the repo
 
-git clone https://github.com/yourname/litlens.git
+git clone https://github.com/ashley-perkins/litlens.git
 cd litlens
 
 🧠 Backend
@@ -112,7 +122,7 @@ Backend API at localhost:7860
 
 🤝 Contributing
 
-We're excited to collaborate! Feel free to openissues, suggest features, or contribute PRs.
+We're excited to collaborate! Feel free to open issues, suggest features, or contribute PRs.
 
 This is an early MVP with more features on the way.
 
