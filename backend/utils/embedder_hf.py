@@ -1,17 +1,15 @@
 from sentence_transformers import SentenceTransformer
 import logging
-import os
-os.environ["TRANSFORMERS_CACHE"] = "/tmp/hf_cache"
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-# Use a known-safe model for Hugging Face Spaces
+# Use fallback-safe model loading via SentenceTransformer
 MODEL_NAME = "intfloat/e5-small-v2"
 model = SentenceTransformer(MODEL_NAME)
 
 def embed_text(text: str):
     try:
-        logging.info("🔵 Generating HF embedding with intfloat/e5-small-v2...")
+        logging.info("🔵 Generating HF embedding with SentenceTransformer...")
         embedding = model.encode(text, convert_to_numpy=True).tolist()
         return embedding
     except Exception as e:
