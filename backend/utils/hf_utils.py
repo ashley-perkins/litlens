@@ -12,7 +12,16 @@ async def summarize_text_with_hf_api(text: str, model_name: str = "facebook/bart
 
     async with httpx.AsyncClient() as client:
         response = await client.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-        return result[0]["summary_text"]
+
+        try:
+            response.raise_for_status()
+            result = response.json()
+            if isinstance(result, list) and result and "summary_text" in result[0]:
+                return result[0]["summary_text"]
+            else:
+                raise ValueError(f"Unexpected response format: {result}")
+        except Exception as e:
+            logging.error(f"❌ HuggingFace API error: {e}")
+            logging.debug(f"📦 Full HF response: {response.text}")
+            raise
 
