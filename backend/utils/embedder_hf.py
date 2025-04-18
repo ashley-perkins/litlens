@@ -14,13 +14,6 @@ except Exception as e:
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
-# Set writable Hugging Face cache directory
-os.environ["HF_HOME"] = "/tmp/huggingface"
-os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface"
-os.environ["HF_DATASETS_CACHE"] = "/tmp/huggingface"
-os.environ["HF_METRICS_CACHE"] = "/tmp/huggingface"
-os.environ["NLTK_DATA"] = "/tmp/nltk_data"
-
 # Load HF embedding model (fully compatible with Hugging Face Spaces)
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
