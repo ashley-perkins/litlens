@@ -16,3 +16,5 @@ EXPOSE 7860
 
 # Command to run the app
 CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "7860"]
+
+RUN pip install --upgrade pip
