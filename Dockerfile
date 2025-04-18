@@ -16,7 +16,6 @@ ENV HF_HOME=/tmp/huggingface \
 
 COPY . .
 
-RUN pip install --upgrade pip
 RUN python -m nltk.downloader punkt -d /tmp/nltk_data
 
 EXPOSE 7860
