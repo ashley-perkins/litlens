@@ -193,7 +193,12 @@ async def summarize_with_huggingface_pdfs(
         summaries = []
         for paper in relevant_papers:
             logging.debug(f"📄 Paper dict keys: {paper.keys()}")
-            summary_text = await summarize_text_with_hf_api(paper["content"], model_name="facebook/bart-large-cnn")
+            try:
+                summary_text = await summarize_text_with_hf_api(paper["content"], model_name="facebook/bart-large-cnn")
+            except Exception as summarization_error:
+                logging.warning(f"⚠️ Summarization failed for paper {paper['filename']}: {summarization_error}")
+                summary_text = f"[Summarization failed: {summarization_error}]"
+
             summaries.append({
                 "filename": paper["filename"],
                 "title": paper["title"],
