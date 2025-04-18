@@ -1,6 +1,6 @@
 # utils/embedder_hf.py
-
-from sentence_transformers import SentenceTransformer
+from transformers import AutoModel, AutoTokenizer
+from sentence_transformers import SentenceTransformer, models 
 import logging
 import os
 
@@ -8,10 +8,15 @@ logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
 # Set writable Hugging Face cache directory
 os.environ["HF_HOME"] = "/tmp/huggingface"
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface"
 
 # Load HF embedding model (fully compatible with Hugging Face Spaces)
-MODEL_NAME = "all-MiniLM-L6-v2"
-model = SentenceTransformer(MODEL_NAME)
+MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+
+# Manually create the SentenceTransformer model
+word_embedding_model = models.Transformer(MODEL_NAME)
+pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension())
+model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 
 def embed_text(text: str):
     try:
