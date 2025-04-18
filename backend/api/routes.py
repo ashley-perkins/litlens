@@ -175,6 +175,8 @@ async def summarize_with_huggingface_pdfs(
                 tmp.write(await file.read())
                 tmp_path = tmp.name
             paper = pdf_extractor.extract_text_from_pdf(tmp_path)
+            # Inject file metadata for later use
+            paper.filename = file.filename
             extracted_papers.append(paper)
             os.remove(tmp_path)
 
@@ -192,10 +194,11 @@ async def summarize_with_huggingface_pdfs(
         # === Summarize via Hugging Face ===
         summaries = []
         for paper in relevant_papers:
-            summary_text = await summarize_text_with_hf_api(paper.content, model_name="facebook/bart-large-cnn")
+            # Patch: use paper["content"] instead of paper.content
+            summary_text = await summarize_text_with_hf_api(paper["content"], model_name="facebook/bart-large-cnn")
             summaries.append({
-                "filename": paper.filename,
-                "title": paper.title,
+                "filename": paper.get("filename", "unknown"),
+                "title": paper.get("title", ""),
                 "summary": summary_text
             })
 
