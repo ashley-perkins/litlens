@@ -1,5 +1,6 @@
 import httpx
 import os
+import logging
 
 API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
 if not API_TOKEN:
