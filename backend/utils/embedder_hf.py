@@ -4,11 +4,22 @@ from sentence_transformers import SentenceTransformer, models
 import logging
 import os
 
+try:
+    import nltk
+    nltk.data.path.append("/tmp/nltk_data")
+    nltk.download("punkt", download_dir="/tmp/nltk_data")
+except Exception as e:
+    logging.error(f"❌ NLTK download failed: {e}")
+    raise
+
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
 # Set writable Hugging Face cache directory
 os.environ["HF_HOME"] = "/tmp/huggingface"
 os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface"
+os.environ["HF_DATASETS_CACHE"] = "/tmp/huggingface"
+os.environ["HF_METRICS_CACHE"] = "/tmp/huggingface"
+os.environ["NLTK_DATA"] = "/tmp/nltk_data"
 
 # Load HF embedding model (fully compatible with Hugging Face Spaces)
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"

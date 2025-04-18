@@ -18,3 +18,7 @@ EXPOSE 7860
 CMD ["uvicorn", "backend.app:app", "--host", "0.0.0.0", "--port", "7860"]
 
 RUN pip install --upgrade pip
+
+RUN python -m nltk.downloader punkt -d /tmp/nltk_data
+
+ENV NLTK_DATA=/tmp/nltk_data

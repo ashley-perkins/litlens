@@ -58,3 +58,4 @@ fastapi
 uvicorn
 python-multipart
 aiofiles
+nltk
