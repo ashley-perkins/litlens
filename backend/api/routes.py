@@ -197,7 +197,7 @@ async def summarize_with_huggingface_pdfs(
                 filename = paper.get("filename", "Unknown")
                 title = paper.get("title", "Untitled")
                 content = paper.get("content", "")
-                summary_text = await summarize_text_with_hf_api(content, model_name="facebook/bart-large-cnn")
+                summary_text = await summarize_text_with_hf_api(content, model_name="pszemraj/long-t5-tglobal-base-16384-book-summary")
             except Exception as summarization_error:
                 logging.warning(f"⚠️ Summarization failed for paper {filename}: {summarization_error}")
                 summary_text = f"[Summarization failed: {summarization_error}]"
