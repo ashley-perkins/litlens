@@ -197,7 +197,16 @@ async def summarize_with_huggingface_pdfs(
                 filename = paper.get("filename", "Unknown")
                 title = paper.get("title", "Untitled")
                 content = paper.get("content", "")
-                summary_text = await summarize_text_with_hf_api(content, model_name="sshleifer/distilbart-cnn-12-6")
+
+                # ✅ Truncate input to 2048 characters
+                max_chars = 2048
+                truncated_content = content[:max_chars]
+                logging.debug(f"✂️ Truncated input length: {len(truncated_content)}")
+
+                summary_text = await summarize_text_with_hf_api(
+                    truncated_content,
+                    model_name="sshleifer/distilbart-cnn-12-6"
+                )
             except Exception as summarization_error:
                 logging.warning(f"⚠️ Summarization failed for paper {filename}: {summarization_error}")
                 summary_text = f"[Summarization failed: {summarization_error}]"
