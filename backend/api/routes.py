@@ -72,58 +72,58 @@ def root():
 # 💡Re-enable when usage controls are in place
 # === Full File Upload Summarization ===
 
-#@router.post("/summarize-pdfs")
-#async def summarize_uploaded_pdfs(
-#    files: List[UploadFile] = File(..., description="PDF files to summarize"),
-#    goal: str = Form("", description="Research goal to guide summarization")
-#):
-#    try:
-#        logger.info(f"📁 Starting LitLens pipeline on uploaded files with goal: {goal}")
-#
-#        if not files:
-#            logger.warning("⚠️ No files received from request.")
-#            raise HTTPException(status_code=400, detail="No files uploaded.")
-#
-#        extracted_papers = []
-#        for file in files:
-#            suffix = os.path.splitext(file.filename)[-1]
-#            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-#                tmp.write(await file.read())
-#                tmp_path = tmp.name
+@router.post("/summarize-pdfs")
+async def summarize_uploaded_pdfs(
+    files: List[UploadFile] = File(..., description="PDF files to summarize"),
+    goal: str = Form("", description="Research goal to guide summarization")
+):
+    try:
+        logger.info(f"📁 Starting LitLens pipeline on uploaded files with goal: {goal}")
+
+        if not files:
+            logger.warning("⚠️ No files received from request.")
+            raise HTTPException(status_code=400, detail="No files uploaded.")
+
+        extracted_papers = []
+        for file in files:
+            suffix = os.path.splitext(file.filename)[-1]
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+                tmp.write(await file.read())
+                tmp_path = tmp.name
 
 
-#            paper = pdf_extractor.extract_text_from_pdf(tmp_path)
-#            extracted_papers.append(paper)
-#            os.remove(tmp_path)
+            paper = pdf_extractor.extract_text_from_pdf(tmp_path)
+            extracted_papers.append(paper)
+            os.remove(tmp_path)
 
-#        if not extracted_papers:
-#            logger.warning("⚠️ No valid PDFs extracted from uploads.")
-#            raise HTTPException(status_code=400, detail="No valid PDFs found.")
+        if not extracted_papers:
+            logger.warning("⚠️ No valid PDFs extracted from uploads.")
+            raise HTTPException(status_code=400, detail="No valid PDFs found.")
 
-#        logger.info("🔎 Embedding and filtering uploaded papers")
-#        goal_embedding, paper_embeddings = embedder.embed_goal_and_papers(goal, extracted_papers)
-#        relevant_indexes = relevance_filter.filter_relevant_papers(goal_embedding, paper_embeddings, threshold=0.4)
-#        relevant_papers = [extracted_papers[i] for i in relevant_indexes]
+        logger.info("🔎 Embedding and filtering uploaded papers")
+        goal_embedding, paper_embeddings = embedder.embed_goal_and_papers(goal, extracted_papers)
+        relevant_indexes = relevance_filter.filter_relevant_papers(goal_embedding, paper_embeddings, threshold=0.4)
+        relevant_papers = [extracted_papers[i] for i in relevant_indexes]
 
-#        if not relevant_papers:
-#            logger.warning("⚠️ No papers matched the research goal.")
-#            raise HTTPException(status_code=404, detail="No papers matched the research goal.")
+        if not relevant_papers:
+            logger.warning("⚠️ No papers matched the research goal.")
+            raise HTTPException(status_code=404, detail="No papers matched the research goal.")
 
-#        logger.info("📝 Summarizing relevant papers")
-#        summaries = summarizer.summarize_papers(relevant_papers, goal)
-#
-#        output_path = output_writer.save_summary_to_file(summaries, goal)
-#        logger.info(f"✅ Report generated at {output_path}")
+        logger.info("📝 Summarizing relevant papers")
+        summaries = summarizer.summarize_papers(relevant_papers, goal)
 
-#        return {
-#            "goal": goal,
-#            "summaries": summaries,
-#            "output_path": output_path
-#        }
+        output_path = output_writer.save_summary_to_file(summaries, goal)
+        logger.info(f"✅ Report generated at {output_path}")
 
-#    except Exception as e:
-#        logger.error(f"❌ Summarization pipeline failed: {e}")
-#        raise HTTPException(status_code=500, detail=f"Summarization pipeline failed: {str(e)}")
+        return {
+            "goal": goal,
+            "summaries": summaries,
+            "output_path": output_path
+        }
+
+    except Exception as e:
+        logger.error(f"❌ Summarization pipeline failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Summarization pipeline failed: {str(e)}")
 
 # === Report Markdown Export ===
 class ReportRequest(BaseModel):
