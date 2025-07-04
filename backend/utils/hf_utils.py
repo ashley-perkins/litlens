@@ -12,6 +12,7 @@ async def summarize_text_with_hf_api(text: str, model_name: str = "facebook/bart
     url = f"https://api-inference.huggingface.co/models/{model_name}"
 
     async with httpx.AsyncClient() as client:
+        logging.debug(f"sending to HF model '{model_name}': {text[:300]}")
         response = await client.post(url, headers=headers, json=payload)
 
         try:
