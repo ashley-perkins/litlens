@@ -6,7 +6,7 @@ API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
 if not API_TOKEN:
     raise EnvironmentError("HUGGINGFACE_API_TOKEN not found in environment variables.")
 
-async def summarize_text_with_hf_api(text: str, model_name: str = "sshleifer/distilbart-cnn-12-6"):
+async def summarize_text_with_hf_api(text: str, model_name: str = "philschmid/bart-large-cnn-samsum"):
     headers = {"Authorization": f"Bearer {API_TOKEN}"}
     payload = {"inputs": text}
     url = f"https://api-inference.huggingface.co/models/{model_name}"

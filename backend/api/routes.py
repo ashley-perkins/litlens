@@ -204,8 +204,8 @@ async def summarize_with_huggingface_pdfs(
                 logging.debug(f"✂️ Truncated input length: {len(truncated_content)}")
 
                 summary_text = await summarize_text_with_hf_api(
-                    truncated_content,
-                    model_name="sshleifer/distilbart-cnn-12-6"
+                truncated_content,
+                model_name="philschmid/bart-large-cnn-samsum"
                 )
             except Exception as summarization_error:
                 logging.warning(f"⚠️ Summarization failed for paper {filename}: {summarization_error}")
